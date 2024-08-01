@@ -25,6 +25,18 @@ def Upsample(dim, dim_out=None):
     )
     
 def Downsample(dim, dim_out=None):
+    """
+    downsample the height and width of the input tensor by a factor of 2.
+
+    args:
+        dim (int): number of input channels.
+        dim_out (int, optional): number of output channels after the convolution. 
+                                 Defaults to the value of dim if not specified.
+
+    returns:
+        nn.Sequential: A sequential container that downsamples the input tensor.
+    """
+    
     return nn.Sequential(
         Rearrange('b c (h p1) (w p2) -> b (c p1 p2) h w', p1=2, p2=2),
         nn.Conv2d(dim * 4, default(dim_out, dim), 1)
