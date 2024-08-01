@@ -10,17 +10,19 @@ class SinusoidalPositionEmbeddings(nn.Module):
     def forward(self, time):
         """
         turns a batch of noise levels into a tensor with positional embeddings.
+        positional embeddings are calculated using sine and cosine functions of 
+        varying frequencies. 
         """
         device = time.device
         
         half_dim = self.dim // 2
         
-        embeddings = math.log(10000) / (half_dim - 1)
+        embeddings = math.log(10000) / (half_dim - 1) # scale factor for sinusoidal frequencies
         
-        embeddings = torch.exp(torch.arange(half_dim, device=device) * -embeddings)
+        embeddings = torch.exp(torch.arange(half_dim, device=device) * -embeddings) # actual frequencies
         
-        embeddings = time[:, None] * embeddings[None, :]
+        embeddings = time[:, None] * embeddings[None, :] # encode time tensor with frequencies
         
-        embeddings = torch.cat((embeddings.sin(), embeddings.cos()), dim=-1)
+        embeddings = torch.cat((embeddings.sin(), embeddings.cos()), dim=-1) # concatenate sins and cosins to form the final positional embedding
 
         return embeddings        
