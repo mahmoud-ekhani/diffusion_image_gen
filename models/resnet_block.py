@@ -94,8 +94,17 @@ class ResnetBlock(nn.Module):
             h = self.block2(h)
             
             return h + self.res_conv(h)
-                
-                
+        
+class PreNorm(nn.Module):
+    def __init__(self, in_dim, fn):
+        super().__init__()
+        self.fn = fn
+        self.norm = nn.GroupNorm(num_groups=1,
+                                 num_channels=in_dim)
+
+    def forward(self, x):
+        x = self.norm(x)
+        return self.fn(x)                
         
         
         
