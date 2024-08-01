@@ -19,6 +19,17 @@ def num_to_groups(num, divisor):
     return arr
 
 def Upsample(dim, dim_out=None):
+    """
+    upsample height and width of input tensor by a factor of 2.
+    
+    args:
+        dim (int): number of input channels
+        dim_out (int, optional): number of output channels after convolution.
+                                 defaults to dim if not specified.
+                                 
+    returns:
+        nn.Sequential: a sequential container that upsamples input tensor
+    """
     return nn.Sequential(
         nn.Upsample(scale_factor=2, mode='nearest'),
         nn.Conv2d(dim, default(dim_out, dim), 3, padding=1)
